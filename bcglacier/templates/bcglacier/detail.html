@@ -1,0 +1,206 @@
+{% extends "bcglacier/layout.html" %}
+
+{% block head %}
+{% load static %}
+<!-- <script type="text/javascript" src="{% static "bcglacier/js/js-helpers.js" %}"></script> -->
+{% endblock %}
+
+{% block title %}
+    Site Detail
+{% endblock %}
+
+
+{% block main %}
+{% load bc-helpers %}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<h1>{{ site.name }} ({{site.code}})
+	{% for c in 1|range:6  %}
+			<img id="star{{ forloop.counter }}1"src="/static/bcglacier/images/{{ rating.avgrating|getStar:c }}.png">
+	{% endfor %}
+	{{ rating.avgrating }}
+</h1>
+<p> Elevation: {{site.elevation}} | Fires Allowed: {{site.fires}}</p>
+
+
+<!-- Team section -->
+ <div class="container filmstrip">
+  <div class="row text-center">
+
+   {% for photo in site.photo_set.all %}
+	   <div class="col-lg-3 col-md-3 col-sm-12 item">
+		<img src="{{ photo.image.url }}" class="img-fluid" alt="team">
+		<!-- <a href="{{ photo.image.url }}" target="_blank" ></a> *doesn't work, no images shown-->
+	   </div>
+   {% endfor %}
+   <!-- <div class="col-lg-3 col-md-3 col-sm-12 item"> -->
+    <!-- <img src="{% static "bcglacier/images/IMG_6903.JPG" %}" class="img-fluid" alt="team"> -->
+   <!-- </div> -->
+   <!-- <div class="col-lg-3 col-md-3 col-sm-12 item"> -->
+    <!-- <img src="{% static "bcglacier/images/IMG_6783.JPG" %}" class="img-fluid" alt="team"> -->
+   <!-- </div> -->
+   <!-- <div class="col-lg-3 col-md-3 col-sm-12 item"> -->
+    <!-- <img src="{% static "bcglacier/images/IMG_6783.JPG" %}" class="img-fluid" alt="team"> -->
+   <!-- </div> -->
+   <!-- <div class="col-lg-3 col-md-3 col-sm-12 item"> -->
+    <!-- <img src="{% static "bcglacier/images/IMG_6783.JPG" %}" class="img-fluid" alt="team"> -->
+   <!-- </div> -->
+   <!-- <div class="col-lg-3 col-md-3 col-sm-12 item"> -->
+    <!-- <img src="{% static "bcglacier/images/IMG_6783.JPG" %}" class="img-fluid" alt="team"> -->
+   <!-- </div> -->
+ </div>
+ </div>
+
+<br>
+<a class="btn draw-border" data-toggle="collapse" href="#review" role="button" aria-expanded="false" aria-controls="review">
+    Rate {{ site.name }}
+</a><br>
+<div class="collapse" id="review">
+	{% if user.is_authenticated %}
+		<form action="{% url 'bcglacier:votecomment' site.id %}" method="post">
+		{% csrf_token %}
+		<table class="table">
+		  <tr>
+			<td>
+				Rate this campsite:
+			</td>
+			<td>
+				<img id="star1" src="{% static "bcglacier/images/star-empty.png" %}" onclick="rate(1)">
+				<img id="star2" src="{% static "bcglacier/images/star-empty.png" %}" onclick="rate(2)">
+				<img id="star3" src="{% static "bcglacier/images/star-empty.png" %}" onclick="rate(3)">
+				<img id="star4" src="{% static "bcglacier/images/star-empty.png" %}" onclick="rate(4)">
+				<img id="star5" src="{% static "bcglacier/images/star-empty.png" %}" onclick="rate(5)">
+				<input type="hidden" id="stars" name="stars">
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				Comments (Optional):
+			</td>
+			<td colspan="3">
+				<textarea rows="5" cols="50" name="comment" id="comment"></textarea>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<button type="submit" class="btn btn-primary">Enter Review</button>
+			</td>
+		</table>
+		</form>
+	{% else %}
+		<p id="notloggedintext">You have to be logged in to submit a review.  You can continue to view existing reviews and tips</p>
+	{% endif %}
+</div>
+
+<a class="btn draw-border" data-toggle="collapse" href="#oldreviews" role="button" aria-expanded="false" aria-controls="oldreviews">
+    Previous Reviews
+</a>
+<div class="collapse" id="oldreviews">
+	  <div id="table-wrapper-scroll-y">
+		<table class="table">
+		{% for rating in site.ratings_set.all %}
+			{% if rating.comments %}
+				<tr>
+				    <td>{{ rating.user }} (reviewed on: {{rating.comment_date|date:"n-j-Y" }}) </td>
+					  <td>
+							{% for c in 1|range:6  %}
+								{% if rating.rating >= forloop.counter %}
+									<img id="star{{ forloop.counter }}s" width="20" src="{% static "bcglacier/images/star-filled.png" %}">
+								{% else %}
+									<img id="star{{ forloop.counter }}s" width="20" src="{% static "bcglacier/images/star-empty.png" %}">
+								{% endif %}
+							{% endfor %}
+						<!-- <img id="star1s" width="20" src="{% static "bcglacier/images/star-empty.png" %}" onclick="rate(1)"></image> -->
+						<!-- <img id="star2s" width="20" src="{% static "bcglacier/images/star-empty.png" %}" onclick="rate(2)"></image> -->
+						<!-- <img id="star3s" width="20" src="{% static "bcglacier/images/star-empty.png" %}" onclick="rate(3)"></image> -->
+						<!-- <img id="star4s" width="20" src="{% static "bcglacier/images/star-empty.png" %}" onclick="rate(4)"></image> -->
+						<!-- <img id="star5s" width="20" src="{% static "bcglacier/images/star-empty.png" %}" onclick="rate(5)"></image> -->
+						<!-- <input type="hidden" id="stars" name="stars"> -->
+					</td>
+				</tr>
+				<tr>
+				    <!-- <td>{{ rating.rating }}</td> -->
+				    <td colspan="2">{{ rating.comments }}</td>
+				</tr>
+			{% endif %}
+		{% endfor %}
+		</table>
+	  </div>
+</div>
+<br>
+<a class="btn draw-border" data-toggle="collapse" href="#entertips" role="button" aria-expanded="false" aria-controls="entertips">
+    Contribute Tips for {{site.name}}
+</a>
+<div class="collapse" id="entertips">
+	{% if user.is_authenticated %}
+		<form action="{% url 'bcglacier:addinfo' site.id %}" method="post">
+		{% csrf_token %}
+		<table class="table">
+		  <tr>
+			<td>
+				Comments (Optional):
+			</td>
+			<td colspan="3">
+				<textarea rows="5" cols="50" name="comment1" id="comment"></textarea>
+			</td>
+		  </tr>
+		  <tr>
+			<td>
+				<button type="submit" class="btn btn-primary">Enter Tips</button>
+			</td>
+		</table>
+		</form>
+	{% else %}
+		<p id="notloggedintext">You have to be logged in to contribute tips.  You can continue to view existing reviews and tips</p>
+	{% endif %}
+</div>
+<br>
+
+<a class="btn draw-border" data-toggle="collapse" href="#oldtips" role="button" aria-expanded="false" aria-controls="oldtips">
+    Campsite Tips
+</a>
+<div class="collapse" id="oldtips">
+	  <div id="table-wrapper-scroll-y">
+		<table class="table">
+		{% for info in site.information_set.all %}
+			{% if info.info %}
+				<tr>
+				  <td>{{ info.user }}<br>{{info.info_date|date:"n-j-Y"}}</td>
+				  <td>{{ info.info }}</td>
+				</tr>
+			{% endif %}
+		{% endfor %}
+		</table>
+	  </div>
+</div>
+<a class="btn draw-border" data-toggle="collapse" href="#addpic" role="button" aria-expanded="false" aria-controls="addpic">
+    Contribute Picture
+</a>
+<div class="collapse" id="addpic">
+	<form action="{% url 'bcglacier:addpicture' site.id %}" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	<table class="table">
+	  <tr>
+		<td>
+			User (optional):
+		</td>
+		<td>
+			<input name="user2" length="20">
+		</td>
+	  </tr>
+	  <tr>
+		<td>
+			Image (Optional):
+		</td>
+		<td>
+			<input type="file" name="image"/>
+		</td>
+	  </tr>
+	  <tr>
+		<td>
+			<button type="submit" class="btn btn-primary">Upload Picture</button>
+		</td>
+	</table>
+	</form>
+<!-- </div>
+{% endblock %}

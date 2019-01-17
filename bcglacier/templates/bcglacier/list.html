@@ -1,0 +1,42 @@
+{% extends "bcglacier/layout.html" %}
+{% block head %}
+{% endblock %}
+{% block title %}
+    Home
+{% endblock %}
+
+
+{% block main %}
+{% load bc-helpers %}
+{% load static %}
+<br>
+{% if site_list %}
+    <table class="table table-bordered">
+	  <thead>
+		<tr>
+			<th>Name</th>
+			<th>Avg Rating</th>
+			<th>Campsite Code</th>
+			<th>Park Area</th>
+			<th>Fires Allowed</th>
+		</tr>
+	  </thead>
+    {% for site in site_list %}
+    <tr>
+		  <td><a id="listlink" href="{% url 'bcglacier:detail' site.id %}">{{ site.name }}</a></td>
+      <td>
+        {% for c in 1|range:6  %}
+            <img id="star{{ forloop.counter }}1" width="25" src="/static/bcglacier/images/{{ site.avgrating|getStar:c }}.png">
+        {% endfor %}
+        {{ site.avgrating }}
+      </td>
+		  <td>{{ site.code }}</td>
+		  <td>{{ site.area }}</td>
+		  <td>{{ site.fires }}</td>
+		</tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>No sites are loaded.</p>
+{% endif %}
+{% endblock %}

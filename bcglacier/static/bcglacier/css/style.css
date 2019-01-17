@@ -1,0 +1,134 @@
+/* For the fancy button draw */
+.draw-border {
+  box-shadow: inset 0 0 0 4px #58afd1;
+  /* color: #58afd1; */
+  color: white;
+  transition: color 0.25s 0.08333s;
+  position: relative;
+}
+.draw-border::before, .draw-border::after {
+  border: 0 solid transparent;
+  box-sizing: border-box;
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  width: 0;
+  height: 0;
+  bottom: 0;
+  right: 0;
+}
+.draw-border::before {
+  border-bottom-width: 4px;
+  border-left-width: 4px;
+}
+.draw-border::after {
+  border-top-width: 4px;
+  border-right-width: 4px;
+}
+.draw-border:hover {
+  color: #ffe593;
+}
+.draw-border:hover::before, .draw-border:hover::after {
+  border-color: #ffe593;
+  transition: border-color 0s, width 0.25s, height 0.25s;
+  width: 100%;
+  height: 100%;
+}
+.draw-border:hover::before {
+  transition-delay: 0s, 0s, 0.25s;
+}
+.draw-border:hover::after {
+  transition-delay: 0s, 0.25s, 0s;
+}
+/* Make button background transparent */
+.btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1.5;
+  font: 700 1.2rem 'Roboto Slab', sans-serif;
+  padding: 1em 2em;
+  letter-spacing: 0.05rem;
+  width: 100%;
+}
+.btn:focus {
+  outline: 2px dotted #55d7dc;
+}
+
+/* Set background image */
+body {
+	background:url(/static/bcglacier/images/_DSC7777-2.JPG) no-repeat center center fixed;
+	/* background:url(/static/bcglacier/images/IMG_7011-2.JPG) no-repeat center center fixed; */
+	/* background:url(/static/bcglacier/images/IMG_6960-3.JPG) no-repeat center center fixed; */
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+/* Make for controls transparent */
+input {
+        background-color: transparent;
+
+}
+textarea {
+        background-color: transparent;
+
+}
+
+/* Global change of tags to make colors white/yellow for dark background */
+h1 {
+	 color: white;
+}
+p {
+	 color: white;
+}
+td {
+	color: white;
+}
+#listlink {
+	color: yellow;
+	font-weight: bold;
+}
+form, input, label, textarea {
+    color: white !important;
+}
+#notloggedintext {
+    color: white !important;
+}
+
+
+/* For the filmstrip class, make single row scrollable */
+.filmstrip > .row {
+	overflow-x: auto;
+	flex-wrap: nowrap;
+	white-space: nowrap;
+	display: block;
+}
+.filmstrip > .row > .col-lg-3 {
+  display: inline-block;
+  float: none;
+}
+.filmstrip > .row > .col-md-3 {
+  display: inline-block;
+  float: none;
+}
+
+/* Make navbar transparent */
+ .navbar.transparent.navbar-inverse .navbar-inner {
+    border-width: 0px;
+    -webkit-box-shadow: 0px 0px;
+    box-shadow: 0px 0px;
+    background-color: rgba(0,0,0,0.0);
+    background-image: -webkit-gradient(linear, 50.00% 0.00%, 50.00% 100.00%, color-stop( 0% , rgba(0,0,0,0.00)),color-stop( 100% , rgba(0,0,0,0.00)));
+    background-image: -webkit-linear-gradient(270deg,rgba(0,0,0,0.00) 0%,rgba(0,0,0,0.00) 100%);
+    background-image: linear-gradient(180deg,rgba(0,0,0,0.00) 0%,rgba(0,0,0,0.00) 100%);
+}
+
+/* Make some tables have a vertical scroll */
+#table-wrapper-scroll-y {
+	display: block;
+	max-height: 200px;
+	overflow-y: auto;
+	width: 100%;
+	-ms-overflow-style: -ms-autohiding-scrollbar;
+}

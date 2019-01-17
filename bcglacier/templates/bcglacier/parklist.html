@@ -1,0 +1,18 @@
+{% extends "bcglacier/layout.html" %}
+{% block main %}
+
+   <h1>Parks</h1>
+
+<ul>
+{% for park in all_parks %}
+  <li class="parks">
+     <h1>
+         <a href='/bcglacier/index'>{{park.name}}</a>
+     </h1>
+  </li>
+{% endfor %}
+</ul>
+
+</div>
+
+{% endblock %}

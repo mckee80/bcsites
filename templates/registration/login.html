@@ -1,0 +1,14 @@
+{% extends "bcglacier/layout.html" %}
+
+<!-- templates/registration/login.html -->
+
+{% block main %}
+<h2>Login</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Login</button>
+</form>
+<br><br>
+<p>New to the site?</p>  <a id="listlink" href="{% url 'bcglacier:signup' %}">Sign up here!</a>
+{% endblock %}
